@@ -1,62 +1,72 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using VehicleBuy.Auth;
-using VehicleBuy.Helpers;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using VehicleBuy.DTO;
 using VehicleBuy.Models;
-using VehicleBuy.Models.DTO;
-using VehicleBuy.Models.VM;
+using VehicleBuy.Repositories;
 
 namespace VehicleBuy.Controllers
 {
     [Route("api/[controller]")]
-    public class AuthController : Controller
+    [ApiController]
+    public class AuthController : ControllerBase
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly IJWTFactory _jwtFactory;
-        private readonly JWTIssuerOptions _jwtOptions;
+        private readonly IAuthRepository _repo;
+        private readonly IConfiguration _config;
+        private readonly IMapper _mapper;
 
-        public AuthController(UserManager<AppUser> userManager, IJWTFactory jwtFactory, IOptions<JWTIssuerOptions> jwtOptions)
+        public AuthController(IAuthRepository repo, IConfiguration config, IMapper mapper)
         {
-            _userManager = userManager;
-            _jwtFactory = jwtFactory;
-            _jwtOptions = jwtOptions.Value;
+            _mapper = mapper;
+            _config = config;
+            _repo = repo;
         }
 
-        // POST api/auth/login
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(RegisterDto registerDto)
+        {
+            registerDto.Email = registerDto.Email.ToLower();
+            if (await _repo.UserExists(registerDto.Email))
+                return BadRequest("Email already exists");
+
+            var userToCreate = _mapper.Map<TblUser>(registerDto);
+            var createdUser = await _repo.Register(userToCreate , registerDto.Password);
+            return StatusCode(201, new { email = createdUser.Email, fullname = createdUser.FullName });
+        }
+
         [HttpPost("login")]
-        public async Task<IActionResult> Post([FromBody]CredentialsViewModel credentials)
+        public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var identity = await GetClaimsIdentity(credentials.UserName, credentials.Password);
-            if (identity == null)
-            {
-                return BadRequest(Errors.AddErrorToModelState("login_failure", "Invalid username or password.", ModelState));
-            }
-            var jwt = await Tokens.GenerateJwt(identity, _jwtFactory, credentials.UserName, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented });
-            return new OkObjectResult(jwt);
-        }
+            var userFromRepo = await _repo.Login(loginDto.Email.ToLower(), loginDto.Password);
+            if (userFromRepo == null)
+                return Unauthorized();
 
-        private async Task<ClaimsIdentity> GetClaimsIdentity(string userName, string password)
-        {
-            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
-                return await Task.FromResult<ClaimsIdentity>(null);
-            var userToVerify = await _userManager.FindByNameAsync(userName);
-            if (userToVerify == null) return await Task.FromResult<ClaimsIdentity>(null);
-            if (await _userManager.CheckPasswordAsync(userToVerify, password))
+            var claims = new[]
             {
-                return await Task.FromResult(_jwtFactory.GenerateClaimsIdentity(userName, userToVerify.Id));
-            }
-            return await Task.FromResult<ClaimsIdentity>(null);
+                new Claim(ClaimTypes.NameIdentifier, userFromRepo.UserId.ToString()),
+                new Claim(ClaimTypes.Name, userFromRepo.Email)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8
+                .GetBytes(_config.GetSection("AppSettings:Token").Value));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = creds
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return Ok(new { token = tokenHandler.WriteToken(token), email = userFromRepo.Email, fullname = userFromRepo.FullName });
         }
     }
 }

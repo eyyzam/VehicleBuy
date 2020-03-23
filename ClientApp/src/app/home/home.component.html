@@ -1,20 +1,16 @@
-<nav class="navbar navbar-dark bg-dark">
-  <a class="navbar-brand text-white">JWT Auth System</a>
-  <button class="btn btn-danger my-2 my-sm-0" (click)="onLogout()">
-    Logout
-  </button>
-</nav>
-
-<div class="card m-5" style="width:18rem" *ngIf="userDetails">
-  <ul class="list-group">
-    <li class="list-group-item">
-      <strong>Username : </strong>{{ userDetails.userName }}
-    </li>
-    <li class="list-group-item">
-      <strong>FullName : </strong>{{ userDetails.fullName }}
-    </li>
-    <li class="list-group-item">
-      <strong>Email : </strong>{{ userDetails.email }}
-    </li>
-  </ul>
-</div>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Welcome in VehicleBuy!</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>VehicleBuy is an app where you can easily buy/sell cars.</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button routerLink="/login" color="primary">
+      Login to your Account
+    </button>
+    <button mat-raised-button routerLink="/register">
+      Don't have an account yet? Register now
+    </button>
+  </mat-card-actions>
+</mat-card>

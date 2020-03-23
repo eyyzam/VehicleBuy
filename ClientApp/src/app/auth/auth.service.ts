@@ -1,59 +1,63 @@
 import { Injectable } from "@angular/core";
-import {
-  FormBuilder,
-  Validators,
-  FormGroup,
-  FormControl
-} from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
+import { Observable, of, BehaviorSubject } from "rxjs";
+import { catchError, tap } from "rxjs/operators";
 
-@Injectable({ providedIn: "root" })
-export class UserService {
-  constructor(private fb: FormBuilder, private http: HttpClient) {}
-  readonly BaseURI = "http://localhost:51220/api";
+@Injectable({
+  providedIn: "root"
+})
+export class AuthService {
+  apiUrl = "http://localhost:51220/api/auth/";
+  userLocalStorage = new BehaviorSubject(this.userItem);
 
-  formModel = this.fb.group({
-    UserName: ["", Validators.required],
-    Email: ["", Validators.email],
-    FullName: [""],
-    Passwords: this.fb.group(
-      {
-        Password: ["", [Validators.required, Validators.minLength(4)]],
-        ConfirmPassword: ["", Validators.required]
-      },
-      { validator: this.comparePasswords }
-    )
-  });
+  constructor(private http: HttpClient) {}
 
-  comparePasswords(fb: FormGroup) {
-    let confirmPswrdCtrl = fb.get("ConfirmPassword");
-    //passwordMismatch
-    //confirmPswrdCtrl.errors={passwordMismatch:true}
-    if (
-      confirmPswrdCtrl.errors == null ||
-      "passwordMismatch" in confirmPswrdCtrl.errors
-    ) {
-      if (fb.get("Password").value != confirmPswrdCtrl.value)
-        confirmPswrdCtrl.setErrors({ passwordMismatch: true });
-      else confirmPswrdCtrl.setErrors(null);
+  set userItem(value) {
+    if (value !== null) {
+      localStorage.setItem("user", value);
     }
+    this.userLocalStorage.next(value);
   }
 
-  register() {
-    var body = {
-      UserName: this.formModel.value.UserName,
-      Email: this.formModel.value.Email,
-      FullName: this.formModel.value.FullName,
-      Password: this.formModel.value.Passwords.Password
+  get userItem() {
+    return localStorage.getItem("user");
+  }
+
+  login(data: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl + "login", data).pipe(
+      tap(_ => this.log("login")),
+      catchError(this.handleError("login", []))
+    );
+  }
+
+  register(data: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl + "register", data).pipe(
+      tap(_ => this.log("register")),
+      catchError(this.handleError("register", []))
+    );
+  }
+
+  private handleError<T>(operation = "operation", result?: T) {
+    return (error: any): Observable<T> => {
+      // TODO: send the error to remote logging infrastructure
+      console.error(error); // log to console instead
+
+      // TODO: better job of transforming error for user consumption
+      this.log(`${operation} failed: ${error.message}`);
+
+      // Let the app keep running by returning an empty result.
+      return of(result as T);
     };
-    return this.http.post(this.BaseURI + "/ApplicationUser/Register", body);
   }
 
-  login(formData) {
-    return this.http.post(this.BaseURI + "/ApplicationUser/Login", formData);
+  /** Log a HeroService message with the MessageService */
+  private log(message: string) {
+    console.log(message);
   }
 
-  getUserProfile() {
-    return this.http.get(this.BaseURI + "/UserProfile");
+  userLogout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    this.userItem = null;
   }
 }

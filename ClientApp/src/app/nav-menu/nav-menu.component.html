@@ -1,44 +1,27 @@
-<header>
-  <nav
-    class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"
-  >
-    <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">VehicleBuy</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target=".navbar-collapse"
-        aria-label="Toggle navigation"
-        [attr.aria-expanded]="isExpanded"
-        (click)="toggle()"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div
-        class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
-        [ngClass]="{ show: isExpanded }"
-      >
-        <ul class="navbar-nav flex-grow">
-          <li
-            class="nav-item"
-            [routerLinkActive]="['link-active']"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
-            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/counter']"
-              >Counter</a
-            >
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/fetch-data']"
-              >Fetch data</a
-            >
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-</header>
+<mat-toolbar color="accent">
+  <span>
+    <h3><b>VehicleBuy App</b></h3>
+  </span>
+  <span class="toolbar-fill"> </span>
+  <span>
+    <button mat-button routerLink="/login" *ngIf="!userLoggedIn">
+      <span>Login</span>
+    </button>
+    <button mat-button routerLink="/register" *ngIf="!userLoggedIn">
+      <span>Register</span>
+    </button>
+    <button mat-button *ngIf="userLoggedIn">
+      <span>My Auctions</span>
+    </button>
+    <button mat-button *ngIf="userLoggedIn">
+      <span>{{
+        loggedUserInfo.email === null || undefined
+          ? "Not Logged In"
+          : loggedUserInfo.email
+      }}</span>
+    </button>
+    <button mat-button *ngIf="userLoggedIn" (click)="logout()">
+      <span>Logout</span>
+    </button>
+  </span>
+</mat-toolbar>

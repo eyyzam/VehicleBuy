@@ -9,7 +9,6 @@ import { AppComponent } from "./app.component";
 import { NavMenuComponent } from "./nav-menu/nav-menu.component";
 import { HomeComponent } from "./home/home.component";
 import { CounterComponent } from "./counter/counter.component";
-import { FetchDataComponent } from "./fetch-data/fetch-data.component";
 
 // Angular Material Components
 import { MatToolbarModule } from "@angular/material/toolbar";
@@ -29,10 +28,11 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatDatepickerModule } from "@angular/material/datepicker";
-import { UserComponent } from "./auth/user.component";
-import { RegistrationFormComponent } from "./auth/registration-form/registration-form.component";
-import { LoginFormComponent } from "./auth/login-form/login-form.component";
-import { AuthGuard } from "./auth/guards/auth.guard";
+
+import { LoginComponent } from "./auth/login/login.component";
+import { RegisterComponent } from "./auth/register/register.component";
+import { TokenInterceptor } from "./auth/interceptors/token.interceptor";
+import { BookComponent } from "./book/book.component";
 
 @NgModule({
   declarations: [
@@ -40,10 +40,9 @@ import { AuthGuard } from "./auth/guards/auth.guard";
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    FetchDataComponent,
-    UserComponent,
-    RegistrationFormComponent,
-    LoginFormComponent,
+    LoginComponent,
+    RegisterComponent,
+    BookComponent,
     HomeComponent
   ],
   imports: [
@@ -71,19 +70,28 @@ import { AuthGuard } from "./auth/guards/auth.guard";
     MatDatepickerModule,
     ReactiveFormsModule,
     RouterModule.forRoot([
-      { path: "", redirectTo: "/user/login", pathMatch: "full" },
+      { path: "", component: HomeComponent, data: { title: "Main Page" } },
       {
-        path: "user",
-        component: UserComponent,
-        children: [
-          { path: "registration", component: RegistrationFormComponent },
-          { path: "login", component: LoginFormComponent }
-        ]
+        path: "book",
+        component: BookComponent,
+        data: { title: "List of Books" }
       },
-      { path: "home", component: HomeComponent, canActivate: [AuthGuard] }
+      { path: "login", component: LoginComponent, data: { title: "Login" } },
+      {
+        path: "register",
+        component: RegisterComponent,
+        data: { title: "Register" }
+      },
+      { path: "home", component: HomeComponent }
     ])
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
