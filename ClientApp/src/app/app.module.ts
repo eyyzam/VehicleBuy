@@ -33,6 +33,9 @@ import { LoginComponent } from "./auth/login/login.component";
 import { RegisterComponent } from "./auth/register/register.component";
 import { TokenInterceptor } from "./auth/interceptors/token.interceptor";
 import { BookComponent } from "./book/book.component";
+import { AuctionService } from "./auction/auction.service";
+import { AuctionComponent } from "./auction/auction.component";
+import { AuctionCreateComponent } from "./auction/create/auction-create.component";
 
 @NgModule({
   declarations: [
@@ -43,7 +46,9 @@ import { BookComponent } from "./book/book.component";
     LoginComponent,
     RegisterComponent,
     BookComponent,
-    HomeComponent
+    HomeComponent,
+    AuctionComponent,
+    AuctionCreateComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -90,7 +95,8 @@ import { BookComponent } from "./book/book.component";
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }
+    },
+    AuctionService
   ],
   bootstrap: [AppComponent]
 })

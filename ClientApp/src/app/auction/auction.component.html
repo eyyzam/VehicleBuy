@@ -1,0 +1,130 @@
+<div class="content">
+  <mat-list>
+    <div mat-subheader><h3>Available Auctions</h3></div>
+  </mat-list>
+  <div>
+    <form [formGroup]="auctionForm" class="auctionForm">
+      <mat-form-field>
+        <mat-select
+          name="category"
+          placeholder="Vehicle Category"
+          formControlName="auctionCarCategory"
+          #category
+        >
+          <mat-option value="small_cars">Small Cars</mat-option>
+          <mat-option value="city_cars">City Cars</mat-option>
+          <mat-option value="compact">Compact</mat-option>
+          <mat-option value="sedan">Sedan</mat-option>
+          <mat-option value="combi">Combi</mat-option>
+          <mat-option value="minivan">Minivan</mat-option>
+          <mat-option value="suv">SUV</mat-option>
+          <mat-option value="cabrio">Cabrio</mat-option>
+          <mat-option value="coupe">Coupe</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select
+          name="brand"
+          placeholder="Vehicle Brand"
+          formControlName="auctionCarBrand"
+          #brand
+        >
+          <mat-option value="alfaromeo">Alfa Romeo</mat-option>
+          <mat-option value="hyundai">Hyundai</mat-option>
+          <mat-option value="kia">Kia</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select
+          name="model"
+          placeholder="Vehicle Model"
+          formControlName="auctionCarModel"
+          #model
+        >
+          <mat-option value="alfaromeo_gt">GT</mat-option>
+          <mat-option value="alfaromeo_159">159</mat-option>
+          <mat-option value="hyundai_getz">Getz</mat-option>
+          <mat-option value="kia_stinger">Stinger</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select
+          name="year"
+          placeholder="Vehicle Production Year"
+          formControlName="auctionCarProductionYear"
+          #year
+        >
+          <mat-option *ngFor="let year of productionYears" value="year">
+            {{ year }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          type="number"
+          matInput
+          name="mileage"
+          placeholder="Vehicle Mileage"
+          formControlName="auctionCarMileage"
+          #mileage
+        />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select
+          name="enginetype"
+          placeholder="Vehicle Engine Type"
+          formControlName="auctionEngineType"
+          #engineType
+        >
+          <mat-option value="benzine">Petrol</mat-option>
+          <mat-option value="diesel">Diesel</mat-option>
+          <mat-option value="benzinelpg">Petrol + LPG</mat-option>
+          <mat-option value="electric">Electric</mat-option>
+          <mat-option value="ethanol">Ethanol</mat-option>
+          <mat-option value="hybrid">Hybrid</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select
+          name="numofseats"
+          placeholder="Vehicle Number of Seats"
+          formControlName="auctionNumberOfSeats"
+          #numofseats
+        >
+          <mat-option *ngFor="let num of numberOfSeats" value="num">{{
+            num
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select
+          name="color"
+          placeholder="Vehicle Car Color"
+          formControlName="auctionCarColor"
+          #color
+        >
+          <mat-option value="white">White</mat-option>
+          <mat-option value="black">Black</mat-option>
+          <mat-option value="gray">Gray</mat-option>
+          <mat-option value="green">Green</mat-option>
+          <mat-option value="yellow">Yellow</mat-option>
+          <mat-option value="blue">Blue</mat-option>
+          <mat-option value="red">Red</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          name="description"
+          placeholder="Provide details about what you are selling"
+          formControlName="auctionDescription"
+          #description
+        />
+      </mat-form-field>
+    </form>
+    <button mat-raised-button color="primary" (click)="onAuctionSubmit()">
+      <span>Submit</span>
+    </button>
+  </div>
+</div>

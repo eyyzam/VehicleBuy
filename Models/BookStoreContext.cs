@@ -15,6 +15,7 @@ namespace VehicleBuy.Models
 
         public virtual DbSet<TblBook> TblBook { get; set; }
         public virtual DbSet<TblUser> TblUser { get; set; }
+        public virtual DbSet<tblAuctions> TblAuction { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -73,6 +74,23 @@ namespace VehicleBuy.Models
                 entity.Property(e => e.Password).HasMaxLength(128);
 
                 entity.Property(e => e.Salt).HasMaxLength(128);
+            });
+
+            modelBuilder.Entity<tblAuctions>(entity =>
+            {
+                entity.HasKey(e => e.AuctionId);
+                entity.Property(e => e.AuctionId).HasColumnName("AuctionID");
+                entity.Property(e => e.CarCategory).HasMaxLength(50).IsUnicode(false);
+                entity.Property(e => e.CarBrand).HasMaxLength(50).IsUnicode(false);
+                entity.Property(e => e.CarModel).HasMaxLength(50).IsUnicode(false);
+                entity.Property(e => e.CarProductionYear).HasMaxLength(9).HasColumnType("int");
+                entity.Property(e => e.CarMileage).HasMaxLength(9).HasColumnType("int");
+                entity.Property(e => e.CarEngineType).HasMaxLength(50).IsUnicode(false);
+                entity.Property(e => e.CarBodyType).HasMaxLength(50).IsUnicode(false);
+                entity.Property(e => e.CarNumberOfSeats).HasMaxLength(2).HasColumnType("smallint");
+                entity.Property(e => e.CarColor).HasMaxLength(20).IsUnicode(false);
+                entity.Property(e => e.SellerEmail).HasMaxLength(50).IsUnicode(false);
+                entity.Property(e => e.AuctionDescription).IsUnicode(false);
             });
         }
     }
