@@ -78,19 +78,17 @@ namespace VehicleBuy.Models
 
             modelBuilder.Entity<tblAuctions>(entity =>
             {
-                entity.HasKey(e => e.AuctionId);
-                entity.Property(e => e.AuctionId).HasColumnName("AuctionID");
-                entity.Property(e => e.CarCategory).HasMaxLength(50).IsUnicode(false);
-                entity.Property(e => e.CarBrand).HasMaxLength(50).IsUnicode(false);
-                entity.Property(e => e.CarModel).HasMaxLength(50).IsUnicode(false);
-                entity.Property(e => e.CarProductionYear).HasMaxLength(9).HasColumnType("int");
-                entity.Property(e => e.CarMileage).HasMaxLength(9).HasColumnType("int");
-                entity.Property(e => e.CarEngineType).HasMaxLength(50).IsUnicode(false);
-                entity.Property(e => e.CarBodyType).HasMaxLength(50).IsUnicode(false);
-                entity.Property(e => e.CarNumberOfSeats).HasMaxLength(2).HasColumnType("smallint");
-                entity.Property(e => e.CarColor).HasMaxLength(20).IsUnicode(false);
-                entity.Property(e => e.SellerEmail).HasMaxLength(50).IsUnicode(false);
-                entity.Property(e => e.AuctionDescription).IsUnicode(false);
+                entity.HasKey(e => e.auctionId);
+                entity.Property(e => e.carCategory).HasMaxLength(50).IsUnicode(false);
+                entity.Property(e => e.carBrand).HasMaxLength(50).IsUnicode(false);
+                entity.Property(e => e.carModel).HasMaxLength(50).IsUnicode(false);
+                entity.Property(e => e.carProductionYear).HasMaxLength(9).HasColumnType("int");
+                entity.Property(e => e.carMileage).HasMaxLength(9).HasColumnType("int");
+                entity.Property(e => e.carEngineType).HasMaxLength(50).IsUnicode(false);
+                entity.Property(e => e.carNumberOfSeats).HasMaxLength(2).HasColumnType("smallint");
+                entity.Property(e => e.carColor).HasMaxLength(20).IsUnicode(false);
+                entity.Property(e => e.sellerEmail).HasMaxLength(50).IsUnicode(false);
+                entity.Property(e => e.auctionDescription).IsUnicode(false);
             });
         }
     }

@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,26 +34,32 @@ namespace VehicleBuy.Controllers
         public async Task<ActionResult<tblAuctions>> GetAuction(long? id)
         {
             if (id == null) return NotFound();
-            var auction = await _context.TblAuction.FirstOrDefaultAsync(m => m.AuctionId == id);
+            var auction = await _context.TblAuction.FirstOrDefaultAsync(m => m.auctionId == id);
             if (auction == null) return NotFound();
             return auction;
         }
 
         [HttpPost]
-        public async Task<ActionResult<tblAuctions>> CreateAuction([FromBody]AuctionDTO model)
+        public async Task<ActionResult> CreateAuction([FromBody]AuctionDTO model)
         {
             if (ModelState.IsValid)
             {
-                var auctionToCreate = _mapper.Map<tblAuctions>(model);
-                _context.TblAuction.Add(auctionToCreate);
+                var ma = _mapper.Map<tblAuctions>(model);
+                _context.TblAuction.Add(ma);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction("GetAuction", new { AuctionId = model.AuctionId }, model);
+                return Ok(ma.auctionId.ToString());
             }
-            return BadRequest();
+            else
+            {
+                var message = string.Join(" | ", ModelState.Values
+               .SelectMany(v => v.Errors)
+               .Select(e => e.ErrorMessage));
+                return BadRequest();
+            }
         }
 
         [HttpPut]
-        public async Task<IActionResult> EditAuction([FromBody]AuctionDTO auction)
+        public async Task<IActionResult> EditAuction([FromBody]tblAuctions auction)
         {
             _context.Entry(auction).State = EntityState.Modified;
 
@@ -60,7 +69,7 @@ namespace VehicleBuy.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AuctionExists(auction.AuctionId))
+                if (!AuctionExists(auction.auctionId))
                 {
                     return NotFound();
                 } else
@@ -72,9 +81,9 @@ namespace VehicleBuy.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteAuction([FromBody]AuctionDTO auction)
+        public async Task<IActionResult> DeleteAuction([FromBody]tblAuctions auction)
         {
-            var auct= await _context.TblAuction.FindAsync(auction.AuctionId);
+            var auct= await _context.TblAuction.FindAsync(auction.auctionId);
             if (auct == null) return NotFound();
             _context.TblAuction.Remove(auct);
             await _context.SaveChangesAsync();
@@ -83,7 +92,7 @@ namespace VehicleBuy.Controllers
 
         private bool AuctionExists(long id)
         {
-            return _context.TblAuction.Any(e => e.AuctionId == id);
+            return _context.TblAuction.Any(e => e.auctionId == id);
         }
     }
 }

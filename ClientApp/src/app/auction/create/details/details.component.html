@@ -1,0 +1,167 @@
+<div class="new-vehicle-assignment-header">
+  <h4 class="new-vehicle-assignment-text">
+    {{ sectionTitle }}
+  </h4>
+</div>
+<div class="new-vehicle-assignment-content">
+  <div class="offset-md-1 col-md-10 col-xs-12">
+    <form class="NewVehicleForm">
+      <div class="col-md-11 col-lt-md-12">
+        <div class="col-12">
+          <b class="text-red"
+            >Żeby dodać ogłoszenie na naszej stronie jesteś zobowiązany podać
+            numer VIN twojego pojazdu. Takie działanie ma na celu dostarczenie
+            potencjalnemu nabywcy dodatkowych informacji o pojeździe.
+          </b>
+        </div>
+        <mat-form-field class="col-12">
+          <b matPrefix>VIN: </b>
+          <input type="text" matInput />
+        </mat-form-field>
+        <mat-form-field class="col-12">
+          <input type="number" matInput placeholder="Tytuł Ogłoszenia" />
+        </mat-form-field>
+        <mat-form-field class="col-12">
+          <mat-select name="category" placeholder="Typ pojazdu">
+            <mat-option value="personal">Samochód Osobowy</mat-option>
+            <mat-option value="motocycle">Motocykl</mat-option>
+            <mat-option value="commercial">Samochód Dostawczy</mat-option>
+            <mat-option value="truck">Samochód Ciężarowy</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-11 col-lt-md-12">
+        <br />
+        <p class="col-12">
+          <b>Podstawowe informacje o pojeździe</b>
+        </p>
+        <mat-form-field class="col-md-6 col-lt-md-12">
+          <mat-select name="brand" placeholder="Marka">
+            <mat-option value="alfaromeo">Alfa Romeo</mat-option>
+            <mat-option value="hyundai">Hyundai</mat-option>
+            <mat-option value="kia">Kia</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-6 col-lt-md-12">
+          <mat-select name="model" placeholder="Model">
+            <mat-option value="alfaromeo_gt">GT</mat-option>
+            <mat-option value="alfaromeo_159">159</mat-option>
+            <mat-option value="hyundai_getz">Getz</mat-option>
+            <mat-option value="kia_stinger">Stinger</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-6 col-lt-md-12">
+          <mat-select name="year" placeholder="Rok Produkcji">
+            <mat-option *ngFor="let year of productionYears" [value]="year">
+              {{ year }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-6 col-lt-md-12">
+          <input type="number" matInput placeholder="Przebieg" />
+          <b matSuffix>km</b>
+        </mat-form-field>
+        <mat-form-field class="col-md-6 col-lt-md-12">
+          <mat-select name="enginetype" placeholder="Rodzaj Paliwa">
+            <mat-option value="benzine">Benzyna</mat-option>
+            <mat-option value="diesel">Diesel</mat-option>
+            <mat-option value="benzinelpg">Benzyna + LPG</mat-option>
+            <mat-option value="electric">Elektryczny</mat-option>
+            <mat-option value="ethanol">Etanol</mat-option>
+            <mat-option value="hybrid">Hybryda</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-6 col-lt-md-12">
+          <mat-select name="transmission" placeholder="Skrzynia biegów">
+            <mat-option value="manual">Manualna</mat-option>
+            <mat-option value="automatic">Automatyczna</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-9">
+          <input
+            type="text"
+            matInput
+            placeholder="Informacje o silniku (pojemność, oznaczenie, moc)"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-3">
+          <mat-select name="numofdoors" placeholder="Liczba drzwi">
+            <mat-option *ngFor="let num of numberOfSeats" [value]="num">
+              {{ num }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="col-9">
+          <input
+            type="text"
+            matInput
+            placeholder="Informacje o wersji (nie opis)"
+          />
+        </mat-form-field>
+        <mat-form-field class="col-3">
+          <mat-select name="color" placeholder="Kolor">
+            <mat-option value="white">White</mat-option>
+            <mat-option value="black">Black</mat-option>
+            <mat-option value="gray">Gray</mat-option>
+            <mat-option value="green">Green</mat-option>
+            <mat-option value="yellow">Yellow</mat-option>
+            <mat-option value="blue">Blue</mat-option>
+            <mat-option value="red">Red</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-11 col-lt-md-12">
+        <br />
+        <p class="col-12">
+          <b>Informacje o wyposażeniu</b>
+        </p>
+
+        <mat-radio-button
+          class="col-md-6 col-xs-12"
+          *ngFor="let item of possibleVehicleEquipment"
+          [value]="item.equipmentName"
+        >
+          {{ item.equipmentName }}
+        </mat-radio-button>
+      </div>
+      <div
+        class="offset-xs-2 offset-sm-2 offset-md-3 col-xs-8 col-sm-8 col-md-6"
+      >
+        <br />
+        <p class="col-12 text-center">
+          <b>Oczekiwania finansowe</b>
+        </p>
+        <mat-form-field class="col-12">
+          <input
+            type="number"
+            matInput
+            placeholder="Podaj cenę brutto (w PLN)"
+          />
+          <b matSuffix>zł</b>
+        </mat-form-field>
+      </div>
+    </form>
+    <hr />
+    <br />
+    <p class="col-12">
+      <b>Informacje o pojeździe</b>
+    </p>
+    <ckeditor
+      [editor]="Editor"
+      data="{{ offerDescription }}"
+      [(ngModel)]="offerDescription"
+      (ready)="onReady($event)"
+    ></ckeditor>
+    <div class="form-buttons">
+      <button
+        mat-raised-button
+        class="col-6 submit-button"
+        color="primary"
+        (click)="onFormSubmit()"
+      >
+        <span> Potwierdź i przejdź dalej</span>
+      </button>
+    </div>
+  </div>
+</div>

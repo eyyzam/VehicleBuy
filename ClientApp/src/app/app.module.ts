@@ -28,6 +28,7 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatRadioModule } from "@angular/material/radio";
 
 import { LoginComponent } from "./auth/login/login.component";
 import { RegisterComponent } from "./auth/register/register.component";
@@ -36,6 +37,9 @@ import { BookComponent } from "./book/book.component";
 import { AuctionService } from "./auction/auction.service";
 import { AuctionComponent } from "./auction/auction.component";
 import { AuctionCreateComponent } from "./auction/create/auction-create.component";
+import { AuctionCreateDetailsComponent } from "./auction/create/details/details.component";
+
+import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
 
 @NgModule({
   declarations: [
@@ -48,7 +52,8 @@ import { AuctionCreateComponent } from "./auction/create/auction-create.componen
     BookComponent,
     HomeComponent,
     AuctionComponent,
-    AuctionCreateComponent
+    AuctionCreateComponent,
+    AuctionCreateDetailsComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -74,6 +79,8 @@ import { AuctionCreateComponent } from "./auction/create/auction-create.componen
     MatExpansionModule,
     MatDatepickerModule,
     ReactiveFormsModule,
+    MatRadioModule,
+    CKEditorModule,
     RouterModule.forRoot([
       { path: "", component: HomeComponent, data: { title: "Main Page" } },
       {
@@ -87,7 +94,27 @@ import { AuctionCreateComponent } from "./auction/create/auction-create.componen
         component: RegisterComponent,
         data: { title: "Register" }
       },
-      { path: "home", component: HomeComponent }
+      { path: "home", component: HomeComponent },
+      {
+        path: "auctions",
+        component: AuctionComponent,
+        data: { title: "Auctions" }
+      },
+      {
+        path: "auctions/new",
+        component: AuctionCreateComponent,
+        data: { title: "New Auction" }
+      },
+      {
+        path: "auctions/new/details/:id",
+        component: AuctionCreateDetailsComponent,
+        data: { title: "Provide more details on what you are selling" }
+      },
+      {
+        path: "edit/:id",
+        component: AuctionComponent,
+        data: { title: "Auction Edit" }
+      }
     ])
   ],
   providers: [

@@ -1,0 +1,12 @@
+.content {
+  margin-top: 32px;
+}
+
+.auctionForm {
+  width: 100%;
+  margin: auto;
+}
+
+mat-form-field {
+  width: 95%;
+}

@@ -1,51 +1,37 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VehicleBuy.DTO
 {
-    [Table("Auctions")]
     public class AuctionDTO
     {
-        public int AuctionId { get; set; }
+        [Required]
+        public string carCategory { get; set; }
 
         [Required]
-        [StringLength(50, MinimumLength =3, ErrorMessage ="Invalid Category")]
-        public string CarCategory { get; set; }
+        public string carBrand { get; set; }
 
         [Required]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "Invalid Brand")]
-        public string CarBrand { get; set; }
+        public string carModel { get; set; }
 
         [Required]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "Invalid Model")]
-        public string CarModel { get; set; }
+        public int carProductionYear { get; set; }
 
         [Required]
-        [StringLength(9, MinimumLength = 3, ErrorMessage = "Invalid Production Year")]
-        public int CarProductionYear { get; set; }
+        public int carMileage { get; set; }
 
         [Required]
-        [StringLength(9, MinimumLength = 3, ErrorMessage = "Invalid Vehicle Mileage")]
-        public int CarMileage { get; set; }
+        public string carEngineType { get; set; }
 
         [Required]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "Invalid Engine Type")]
-        public string CarEngineType { get; set; }
+        public int carNumberOfSeats { get; set; }
 
         [Required]
-        [StringLength(9, MinimumLength = 3, ErrorMessage = "Invalid Category")]
-        public int CarNumberOfSeats { get; set; }
+        public string carColor { get; set; }
 
         [Required]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "Invalid Color")]
-        public string CarColor { get; set; }
+        public string sellerEmail { get; set; }
 
         [Required]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "Invalid Seller Email")]
-        public string SellerEmail { get; set; }
-
-        [Required]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "Invalid Description")]
-        public string AuctionDescription { get; set; }
+        public string auctionDescription { get; set; }
     }
 }
