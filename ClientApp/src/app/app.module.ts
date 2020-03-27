@@ -34,12 +34,12 @@ import { LoginComponent } from "./auth/login/login.component";
 import { RegisterComponent } from "./auth/register/register.component";
 import { TokenInterceptor } from "./auth/interceptors/token.interceptor";
 import { BookComponent } from "./book/book.component";
-import { AuctionService } from "./auction/auction.service";
-import { AuctionComponent } from "./auction/auction.component";
-import { AuctionCreateComponent } from "./auction/create/auction-create.component";
-import { AuctionCreateDetailsComponent } from "./auction/create/details/details.component";
 
 import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
+import { VehiclesComponent } from "./vehicle/vehicles.component";
+import { VehicleCreateComponent } from "./vehicle/create/create.component";
+import { VehicleService } from "./vehicle/vehicles.service";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [
@@ -51,9 +51,8 @@ import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
     RegisterComponent,
     BookComponent,
     HomeComponent,
-    AuctionComponent,
-    AuctionCreateComponent,
-    AuctionCreateDetailsComponent
+    VehiclesComponent,
+    VehicleCreateComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -78,6 +77,7 @@ import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
     MatSnackBarModule,
     MatExpansionModule,
     MatDatepickerModule,
+    MatCheckboxModule,
     ReactiveFormsModule,
     MatRadioModule,
     CKEditorModule,
@@ -88,31 +88,30 @@ import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
         component: BookComponent,
         data: { title: "List of Books" }
       },
-      { path: "login", component: LoginComponent, data: { title: "Login" } },
+      {
+        path: "login",
+        component: LoginComponent,
+        data: { title: "Zaloguj się do serwisu" }
+      },
       {
         path: "register",
         component: RegisterComponent,
-        data: { title: "Register" }
+        data: { title: "Zarejestruj się" }
       },
       { path: "home", component: HomeComponent },
       {
-        path: "auctions",
-        component: AuctionComponent,
-        data: { title: "Auctions" }
+        path: "vehicles",
+        component: VehiclesComponent,
+        data: { title: "Dostępne ogłoszenia" }
       },
       {
-        path: "auctions/new",
-        component: AuctionCreateComponent,
-        data: { title: "New Auction" }
+        path: "vehicle/new",
+        component: VehicleCreateComponent,
+        data: { title: "Nowe ogłoszenie" }
       },
       {
-        path: "auctions/new/details/:id",
-        component: AuctionCreateDetailsComponent,
-        data: { title: "Provide more details on what you are selling" }
-      },
-      {
-        path: "edit/:id",
-        component: AuctionComponent,
+        path: "vehicle/edit/:id",
+        component: VehicleCreateComponent,
         data: { title: "Auction Edit" }
       }
     ])
@@ -123,7 +122,7 @@ import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
       useClass: TokenInterceptor,
       multi: true
     },
-    AuctionService
+    VehicleService
   ],
   bootstrap: [AppComponent]
 })

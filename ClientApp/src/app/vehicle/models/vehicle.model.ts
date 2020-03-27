@@ -2,7 +2,7 @@ import { AdditionalVehicleEquipment } from "./additionalVehicleEquipment.model";
 
 export class Vehicle {
   constructor(
-    public vehicleId: number,
+    public vehicleId: number, // NOT IN FORM
     public offerTitle: string,
     public vehicleCategory: string,
     public vehicleVIN: string,
@@ -17,8 +17,8 @@ export class Vehicle {
     public vehicleNumberOfDoors: number,
     public vehicleColor: string,
     public vehiclePrice: string,
-    public vehicleEquipment: AdditionalVehicleEquipment[],
-    public sellerEmail: string,
-    public offerDescription: string
+    public vehicleEquipment: AdditionalVehicleEquipment[], // NOT IN FORM
+    public sellerEmail: string, // NOT IN FORM
+    public offerDescription: string // NOT IN FORM
   ) {}
 }

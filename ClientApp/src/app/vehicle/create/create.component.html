@@ -5,7 +5,7 @@
 </div>
 <div class="new-vehicle-assignment-content">
   <div class="offset-md-1 col-md-10 col-xs-12">
-    <form class="NewVehicleForm">
+    <form [formGroup]="NewVehicleForm" class="NewVehicleForm">
       <div class="col-md-11 col-lt-md-12">
         <div class="col-12">
           <b class="text-red"
@@ -16,13 +16,22 @@
         </div>
         <mat-form-field class="col-12">
           <b matPrefix>VIN: </b>
-          <input type="text" matInput />
+          <input type="text" matInput formControlName="vehicleVIN" />
         </mat-form-field>
         <mat-form-field class="col-12">
-          <input type="number" matInput placeholder="Tytuł Ogłoszenia" />
+          <input
+            type="text"
+            matInput
+            placeholder="Tytuł Ogłoszenia"
+            formControlName="offerTitle"
+          />
         </mat-form-field>
         <mat-form-field class="col-12">
-          <mat-select name="category" placeholder="Typ pojazdu">
+          <mat-select
+            name="category"
+            placeholder="Typ pojazdu"
+            formControlName="vehicleCategory"
+          >
             <mat-option value="personal">Samochód Osobowy</mat-option>
             <mat-option value="motocycle">Motocykl</mat-option>
             <mat-option value="commercial">Samochód Dostawczy</mat-option>
@@ -36,14 +45,22 @@
           <b>Podstawowe informacje o pojeździe</b>
         </p>
         <mat-form-field class="col-md-6 col-lt-md-12">
-          <mat-select name="brand" placeholder="Marka">
+          <mat-select
+            name="brand"
+            placeholder="Marka"
+            formControlName="vehicleBrand"
+          >
             <mat-option value="alfaromeo">Alfa Romeo</mat-option>
             <mat-option value="hyundai">Hyundai</mat-option>
             <mat-option value="kia">Kia</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col-md-6 col-lt-md-12">
-          <mat-select name="model" placeholder="Model">
+          <mat-select
+            name="model"
+            placeholder="Model"
+            formControlName="vehicleModel"
+          >
             <mat-option value="alfaromeo_gt">GT</mat-option>
             <mat-option value="alfaromeo_159">159</mat-option>
             <mat-option value="hyundai_getz">Getz</mat-option>
@@ -51,18 +68,31 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col-md-6 col-lt-md-12">
-          <mat-select name="year" placeholder="Rok Produkcji">
+          <mat-select
+            name="year"
+            placeholder="Rok Produkcji"
+            formControlName="vehicleProductionYear"
+          >
             <mat-option *ngFor="let year of productionYears" [value]="year">
               {{ year }}
             </mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col-md-6 col-lt-md-12">
-          <input type="number" matInput placeholder="Przebieg" />
+          <input
+            type="number"
+            matInput
+            placeholder="Przebieg"
+            formControlName="vehicleMileage"
+          />
           <b matSuffix>km</b>
         </mat-form-field>
         <mat-form-field class="col-md-6 col-lt-md-12">
-          <mat-select name="enginetype" placeholder="Rodzaj Paliwa">
+          <mat-select
+            name="enginetype"
+            placeholder="Rodzaj Paliwa"
+            formControlName="vehicleEngineType"
+          >
             <mat-option value="benzine">Benzyna</mat-option>
             <mat-option value="diesel">Diesel</mat-option>
             <mat-option value="benzinelpg">Benzyna + LPG</mat-option>
@@ -72,7 +102,11 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col-md-6 col-lt-md-12">
-          <mat-select name="transmission" placeholder="Skrzynia biegów">
+          <mat-select
+            name="transmission"
+            placeholder="Skrzynia biegów"
+            formControlName="vehicleTransmission"
+          >
             <mat-option value="manual">Manualna</mat-option>
             <mat-option value="automatic">Automatyczna</mat-option>
           </mat-select>
@@ -82,11 +116,16 @@
             type="text"
             matInput
             placeholder="Informacje o silniku (pojemność, oznaczenie, moc)"
+            formControlName="vehicleEngineInfo"
           />
         </mat-form-field>
         <mat-form-field class="col-3">
-          <mat-select name="numofdoors" placeholder="Liczba drzwi">
-            <mat-option *ngFor="let num of numberOfSeats" [value]="num">
+          <mat-select
+            name="numofdoors"
+            placeholder="Liczba drzwi"
+            formControlName="vehicleNumberOfDoors"
+          >
+            <mat-option *ngFor="let num of numberOfDoors" [value]="num">
               {{ num }}
             </mat-option>
           </mat-select>
@@ -97,10 +136,15 @@
             type="text"
             matInput
             placeholder="Informacje o wersji (nie opis)"
+            formControlName="vehicleVersion"
           />
         </mat-form-field>
         <mat-form-field class="col-3">
-          <mat-select name="color" placeholder="Kolor">
+          <mat-select
+            name="color"
+            placeholder="Kolor"
+            formControlName="vehicleColor"
+          >
             <mat-option value="white">White</mat-option>
             <mat-option value="black">Black</mat-option>
             <mat-option value="gray">Gray</mat-option>
@@ -116,14 +160,20 @@
         <p class="col-12">
           <b>Informacje o wyposażeniu</b>
         </p>
-
-        <mat-radio-button
-          class="col-md-6 col-xs-12"
+        <span
+          class="col-md-6 col-xs-12 eq-option-span"
           *ngFor="let item of possibleVehicleEquipment"
-          [value]="item.equipmentName"
         >
-          {{ item.equipmentName }}
-        </mat-radio-button>
+          <mat-checkbox
+            class="col-md-6 col-xs-12"
+            style="margin: 0; padding: 0;"
+            name="eq"
+            (change)="equipmentManager($event, item)"
+            [value]="item.equipmentName"
+          >
+            {{ item.equipmentName }}
+          </mat-checkbox>
+        </span>
       </div>
       <div
         class="offset-xs-2 offset-sm-2 offset-md-3 col-xs-8 col-sm-8 col-md-6"
@@ -137,6 +187,7 @@
             type="number"
             matInput
             placeholder="Podaj cenę brutto (w PLN)"
+            formControlName="vehiclePrice"
           />
           <b matSuffix>zł</b>
         </mat-form-field>

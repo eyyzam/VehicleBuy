@@ -1,4 +1,4 @@
-import { AdditionalVehicleEquipment } from "../auction/interface/additionalVehicleEquipment.model";
+import { AdditionalVehicleEquipment } from "../models/additionalVehicleEquipment.model";
 
 export const PossibleVehicleEquipment: AdditionalVehicleEquipment[] = [
   new AdditionalVehicleEquipment(1, "ABS"),
