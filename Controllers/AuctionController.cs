@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,18 +32,50 @@ namespace VehicleBuy.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<tblAuctions>> GetAuction(long? id)
+        public async Task<ActionResult<VehicleDTO>> GetAuction(long? id)
         {
             if (id == null) return NotFound();
+            var vehicle = await _context.TblVehicles.FirstOrDefaultAsync(m => m.vehicleId == id);
+            if (vehicle == null) return NotFound();
+            var vehicleId = vehicle.vehicleId;
+            var equipment = await _context.TblAVE.Where(x => vehicleId == id).ToListAsync();
+            /*equipment.Select(x => vehicleId == id);*/
+            var x = _mapper.Map<VehicleDTO>(vehicle);
+            x.vehicleEquipment = equipment;
+            return x;
+           /* if (id == null) return NotFound();
             var auction = await _context.TblAuction.FirstOrDefaultAsync(m => m.auctionId == id);
             if (auction == null) return NotFound();
-            return auction;
+            var equipment = await _context.TblAVE.Where(x => Convert.ToInt32(x.carId) == Convert.ToInt32(id)).ToListAsync();
+            auction.v
+            var final = _mapper.Map<VehicleDTO>(auction);
+            final.vehicleEquipment = equipment;
+            return auction;*/
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateAuction([FromBody]AuctionDTO model)
+        public async Task<ActionResult> CreateAuction([FromBody]VehicleDTO model)
         {
             if (ModelState.IsValid)
+            {
+                var map = _mapper.Map<tblVehicles>(model);
+                _context.TblVehicles.Add(map);
+                await _context.SaveChangesAsync();
+                foreach (tblAVE x in model.vehicleEquipment)
+                {
+                    x.vehicleId = map.vehicleId;
+                    var ave = _mapper.Map<tblAVE>(x);
+                    _context.TblAVE.Add(ave);
+                    await _context.SaveChangesAsync();
+                }
+                return Ok(map.vehicleId.ToString());
+            }
+            else
+            {
+                var message = string.Join(" | ", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+                return BadRequest(message);
+            }
+            /*if (ModelState.IsValid)
             {
                 var ma = _mapper.Map<tblAuctions>(model);
                 _context.TblAuction.Add(ma);
@@ -55,7 +88,7 @@ namespace VehicleBuy.Controllers
                .SelectMany(v => v.Errors)
                .Select(e => e.ErrorMessage));
                 return BadRequest();
-            }
+            }*/
         }
 
         [HttpPut]

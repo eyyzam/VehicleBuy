@@ -196,9 +196,9 @@ export class VehicleCreateComponent implements OnInit {
       // TODO CALL EDIT SEVICE
     } else {
       console.log(vehicleData);
-      // this.vehicleService.addVehicle(vehicleData).subscribe(id => {
-      //   this.router.navigate(["/vehicles/details/" + id]);
-      // });
+      this.vehicleService.addVehicle(vehicleData).subscribe(id => {
+        this.router.navigate(["/vehicles/details/" + id]);
+      });
     }
   }
 

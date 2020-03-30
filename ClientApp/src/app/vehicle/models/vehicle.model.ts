@@ -16,7 +16,7 @@ export class Vehicle {
     public vehicleVersion: string,
     public vehicleNumberOfDoors: number,
     public vehicleColor: string,
-    public vehiclePrice: string,
+    public vehiclePrice: number,
     public vehicleEquipment: AdditionalVehicleEquipment[], // NOT IN FORM
     public sellerEmail: string, // NOT IN FORM
     public offerDescription: string // NOT IN FORM
